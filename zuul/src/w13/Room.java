@@ -1,7 +1,7 @@
 package w13;
 
 public class Room {
-	public String description; // 이 Room에 대한 설명.
+	private String description; // 이 Room에 대한 설명.
 	private Room northExit; // 북쪽 방향으로 이웃한 Room을 가리키는 참조변수.
 	private Room southExit;
 	private Room eastExit;
