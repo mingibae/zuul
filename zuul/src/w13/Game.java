@@ -30,7 +30,7 @@ public class Game {
 		// initialise room exits
 		hall.setExit("east", lectureRoom);
 		hall.setExit("south", computerRoom);
-		hall.setExit("west", computerRoom);
+		hall.setExit("west", dongBang);
 		lectureRoom.setExit("west", hall);
 		dongBang.setExit("east", hall);
 		computerRoom.setExit("north", hall);
@@ -38,6 +38,9 @@ public class Game {
 		computerRoom.setExit("down", cellar);
 		office.setExit("west", computerRoom);
 		cellar.setExit("up", computerRoom);
+		
+		computerRoom.setItem(new Item("book", "오래된 마법서", 10));
+		dongBang.setItem(new Item("portion", "체력을 5만큼 올려주는 묘약", 5));
 
 		currentRoom = hall; // 홀에서 게임을 시작한다.
 	}
