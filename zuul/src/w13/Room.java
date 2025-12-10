@@ -48,6 +48,13 @@ public class Room {
 	}
 	
 	/**
+	 * @return Room의 상세한 정보를 모두 모아 문자열로 반환한다.
+	 */
+	public String getLongDescription() {
+		return description + ".\n" + getExitString();
+	}
+	
+	/**
 	 * 방의 출구들을 알려주는 문자열을 반환한다.
 	 * 문자열 예: "Exits: north west".
 	 * @return 출구가 있는 방향들을 알려주는 문자열

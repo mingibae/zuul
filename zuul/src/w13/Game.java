@@ -73,14 +73,11 @@ public class Game {
 		printLocationInfo();
 				
 	}
-	
+	/**
+	 * 현재 위치에 관한 정보를 출력한다.
+	 */
 	private void printLocationInfo() {
-		
-		// 현재 있는 방에 대한 정보 출력
-		System.out.println("Location: " + currentRoom.getDescription());
-		// 출구가 있는 방향을 모두 출력
-		System.out.print(currentRoom.getExitString());
-		System.out.println();
+		System.out.println("Location: " + currentRoom.getLongDescription());
 	}
 
 	/**
@@ -108,7 +105,11 @@ public class Game {
 			goRoom(command);
 		} else if (commandWord.equals("quit")) {
 			wantToQuit = quit(command);
-		}
+		} else if (commandWord.equals("look")) {
+			look();
+		} else if (commandWord.equals("eat")) {
+			printEat();
+		}	
 
 		return wantToQuit;
 	}
@@ -120,8 +121,7 @@ public class Game {
 	 * and a list of the command words.
 	 */
 	private void printHelp() {
-		System.out.print("Commands: ");
-		System.out.println("go quit help");
+		parser.showCommands();
 	}
 
 	/*
@@ -163,6 +163,19 @@ public class Game {
 		} else {
 			return true; // signal that we want to quit
 		}
+	}
+	
+	/**
+	 * 현재 방의 상세 정보를 출력한다.
+	 */
+	private void look() {
+		printLocationInfo();
+	}
+	/**
+	 * eat을 입력하면 Delicious! 출력
+	 */
+	private void printEat() {
+		System.out.println("Delicious!");
 	}
 
 	public static void main(String[] args) {
