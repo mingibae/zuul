@@ -50,7 +50,7 @@ public class Parser {
 	/**
 	 * 모든 명령어들을 화면에 출력한다.
 	 */
-	public void showCommands() {
-		commands.showAll();
+	public String getCommandList() {
+		return commands.getCommandList();
 	}
 }

@@ -121,7 +121,7 @@ public class Game {
 	 * and a list of the command words.
 	 */
 	private void printHelp() {
-		parser.showCommands();
+		System.out.println("Commands: " + parser.getCommandList());
 	}
 
 	/*
