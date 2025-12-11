@@ -2,8 +2,8 @@ package w13;
 
 public class Game {
 	private Parser parser;
-	private Room currentRoom;
-	private Room recentRoom = null;
+	private Player player;
+	private Room hall, lectureRoom, computerRoom, office, dongBang, cellar;
 
 	/**
 	 * Create the game and initialise its internal map.
@@ -11,13 +11,13 @@ public class Game {
 	public Game() {
 		createRooms();
 		parser = new Parser();
+		player = new Player(hall);
 	}
 
 	/**
 	 * Create all the rooms and link their exits together. 방들을 만들고 방의 출구들을 서로 엮어준다.
 	 */
 	private void createRooms() {
-		Room hall, lectureRoom, computerRoom, office, dongBang, cellar;
 
 		// create the rooms
 		hall = new Room("Hall");
@@ -42,8 +42,6 @@ public class Game {
 		computerRoom.addItem(new Item("book", "오래된 마법서", 10));
 		dongBang.addItem(new Item("portion", "체력을 5만큼 올려주는 묘약", 5));
 		dongBang.addItem(new Item("book", "AI tech book", 7));
-
-		currentRoom = hall; // 홀에서 게임을 시작한다.
 	}
 
 	/**
@@ -75,14 +73,15 @@ public class Game {
 		System.out.println("Type 'help' if you need help.");
 		System.out.println();
 		
-		printLocationInfo();
+		printLocationInfo(player.getCurrentRoom());
 				
 	}
 	/**
 	 * 현재 위치에 관한 정보를 출력한다.
+	 * @param room 정보를 출력할 방.
 	 */
-	private void printLocationInfo() {
-		System.out.println("Location: " + currentRoom.getLongDescription());
+	private void printLocationInfo(Room room) {
+		System.out.println("Location: " + player.getCurrentRoom().getLongDescription());
 	}
 
 	/**
@@ -132,7 +131,7 @@ public class Game {
 	}
 
 	/*
-	 * go 명령일 때 이 메소드가 실행된다. "두번째단어"로 north, east, south, west 중 하나가 주어져야 한다. 주어진
+	 * go 명령일 때 이 메소드가 실행된다. "두번째단어"로 옮겨갈 방향이 주어져야 한다. 주어진
 	 * 방향으로의 이동을 시도한다. 그 방향으로 방이 연결되어 있지 않은 경우에는 에러 메세지를 출력한다.
 	 */
 	private void goRoom(Command command) {
@@ -143,18 +142,11 @@ public class Game {
 		}
 
 		String direction = command.getSecondWord();
-
-		// Try to leave current room.
-		Room nextRoom = null;
-		nextRoom = currentRoom.getExit(direction);
-
-		if (nextRoom == null) {
-			System.out.println("No exit in that direction!");
-		} else {
-			recentRoom = currentRoom;
-			currentRoom = nextRoom; // 방을 변경
-			printLocationInfo();
-		}
+		// 지정한 방향으로 이동한다.
+		if (player.moveTo(direction) == -1)
+			System.out.println("그쪽으로는 출구가 없습니다. ");	// 실패한 경우.
+		else
+			printLocationInfo(player.getCurrentRoom());	// 성공한 경우.
 	}
 
 	/*
@@ -177,7 +169,7 @@ public class Game {
 	 * 현재 방의 상세 정보를 출력한다.
 	 */
 	private void look() {
-		printLocationInfo();
+		printLocationInfo(player.getCurrentRoom());
 	}
 	/**
 	 * eat을 입력하면 Delicious! 출력
@@ -190,11 +182,6 @@ public class Game {
 	 * back을 입력하면 이전 방으로 이동
 	 */
 	private void back(Command command) {
-		if (command.hasSecondWord() && currentRoom == recentRoom) {
-			System.out.println("한 단계 전으로만 돌아갈 수 있습니다.");
-			System.out.println("back 명령어는 두 번째 단어를 가질 수 없습니다.");
-			return;
-		}
 		
 		if (command.hasSecondWord()) {
 			// Command에 second word가 있는 경우
@@ -202,18 +189,8 @@ public class Game {
 			return;
 		}
 		
-		if (recentRoom == null && currentRoom.getDescription().equals("Hall")) {
-			printLocationInfo();
-		    return;
-		}
-		
-		if (recentRoom == null) {
-			System.out.println("한 단계 전으로만 돌아갈 수 있습니다.");
-		}
-		else {
-			currentRoom = recentRoom;
-			printLocationInfo();
-		}
+		player.back();
+		printLocationInfo(player.getCurrentRoom());
 	}
 
 	public static void main(String[] args) {
