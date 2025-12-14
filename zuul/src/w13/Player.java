@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Stack;
 
 public class Player {
 	private Room currentRoom;
-	private Room recentRoom;
+	private Stack<Room> pastRooms;
 	private ArrayList<Item> items; // 이 선수가 가지고 있는 아이템들
 	private int maxWeight; // 이 선수가 들고 다닐 수 있는 아이템들의 무게 (최대무게)
 	
@@ -18,7 +19,7 @@ public class Player {
 	 */
 	public Player(Room startRoom, int maxWeight) {
 		currentRoom = startRoom;
-		recentRoom = startRoom;
+		pastRooms = new Stack<Room>();
 		this.maxWeight = maxWeight;
 		items = new ArrayList<>();
 	}
@@ -44,7 +45,7 @@ public class Player {
 		if (nextRoom == null) {
 			return -1;
 		} else {
-			recentRoom = currentRoom;
+			pastRooms.push(currentRoom);
 			currentRoom = nextRoom;
 			return 0;
 		}
@@ -52,14 +53,11 @@ public class Player {
 	
 	/**
 	 * 이전 방으로 돌아간다.
+	 * 처음에 있던 방에 왔으므로 더 이상 돌아갈 수가 없으면 아무 일도 하지 않는다.
 	 */
 	public void back() {
-		if (recentRoom == null) {
-			System.out.println("한 단계 전으로만 돌아갈 수 있습니다.");
-		}
-		else {
-			currentRoom = recentRoom;
-		}
+		if (!pastRooms.isEmpty())
+			currentRoom = pastRooms.pop();
 	}
 	
 	/**

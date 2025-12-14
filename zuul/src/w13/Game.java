@@ -152,7 +152,7 @@ public class Game {
 		String direction = command.getSecondWord();
 		// 지정한 방향으로 이동한다.
 		if (player.moveTo(direction) == -1)
-			System.out.println("그쪽으로는 출구가 없습니다. ");	// 실패한 경우.
+			System.out.println("No exit in that direction! ");	// 실패한 경우.
 		else
 			printLocationInfo(player.getCurrentRoom());	// 성공한 경우.
 	}
